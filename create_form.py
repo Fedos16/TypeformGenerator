@@ -1,9 +1,13 @@
 import pandas as pd
 import requests as req
 import json
-import config
+import os
+from dotenv import load_dotenv
 
-headers = { "Authorization": f"Bearer {config.TOKEN}", "Accept": "application/json" }
+load_dotenv()
+TOKEN = os.getenv('TYPEFORM_TOKEN')
+
+headers = { "Authorization": f"Bearer {TOKEN}", "Accept": "application/json" }
 main_url = "https://api.typeform.com"
 
 # Создание формы
@@ -563,8 +567,8 @@ def setForm():
         }
 
         r = req.post(f"{main_url}/forms", headers=headers, data=json.dumps(create_params))
-        print(r.status_code)
-        
-        return True
+
+        return r.status_code == req.codes.created
+
     except:
         return False
